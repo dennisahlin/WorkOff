@@ -1,19 +1,32 @@
 package se.dennisahlin.workoff;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity {
+    AccountListAdapter accountAdapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        displayAccounts();
     }
 
+    private void displayAccounts() {
+        Account[] accounts = AccountManager.get(this).getAccounts();
+        accountAdapter = new AccountListAdapter(this, R.layout.account_item, accounts );
+        ListView accountList = (ListView) findViewById( R.id.accountList );
+        accountList.setAdapter(accountAdapter);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
