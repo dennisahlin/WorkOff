@@ -15,6 +15,13 @@
 
     <ListView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/accountList" />
+        android:layout_height="0px"
+        android:id="@+id/accountList"
+        android:layout_weight="1" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/next"
+        android:id="@+id/button"/>
 </LinearLayout>
