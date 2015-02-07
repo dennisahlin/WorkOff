@@ -1,7 +1,8 @@
-package se.dennisahlin.workoff;
+package se.dennisahlin.workoff.activities;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.SparseBooleanArray;
@@ -11,7 +12,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
+
+import java.util.ArrayList;
+
+import se.dennisahlin.workoff.AccountListAdapter;
+import se.dennisahlin.workoff.R;
 
 
 public class PickAccountsActivity extends ActionBarActivity implements View.OnClickListener {
@@ -26,21 +31,12 @@ public class PickAccountsActivity extends ActionBarActivity implements View.OnCl
         setContentView(R.layout.pick_accounts);
 
         Account[] accounts = getAccounts();
-        String[] accs = new String[accounts.length];
-        for( int i = 0; i < accounts.length; i++ ){
-            accs[i] = accounts[i].name + " (" + accounts[i].type + ")";
-        }
-
-        accountList = getListView();
+        accountList = (ListView) findViewById( R.id.accountList );
         adapter = new AccountListAdapter( this, R.layout.account_item, accounts );
-        accountList.setAdapter(adapter);
-        accountList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        accountList.setAdapter( adapter );
+        accountList.setChoiceMode( ListView.CHOICE_MODE_MULTIPLE );
         Button button = (Button) findViewById( R.id.button );
-        button.setOnClickListener(this);
-    }
-
-    private ListView getListView() {
-        return (ListView) findViewById( R.id.accountList );
+        button.setOnClickListener( this );
     }
 
     private Account[] getAccounts() {
@@ -71,13 +67,21 @@ public class PickAccountsActivity extends ActionBarActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         SparseBooleanArray checked = accountList.getCheckedItemPositions();
-        String result = "";
+        ArrayList<Account> result = new ArrayList<>();
         for (int i = 0; i < checked.size(); i++){
             int pos = checked.keyAt(i);
             if(checked.valueAt(i))
-                result += ((Account) adapter.getItem(pos)).name;
+                result.add((Account) adapter.getItem(pos));
         }
 
-        Toast.makeText(this, result, Toast.LENGTH_SHORT ).show();
+        String resultString = "";
+        for(int i = 0; i < result.size(); i++){
+            Account account = result.get(i);
+            resultString += account.name + " (" + account.type + ")\n";
+        }
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(EXTRA_ACCOUNTS, resultString);
+        startActivity(intent);
     }
 }

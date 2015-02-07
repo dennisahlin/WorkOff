@@ -7,5 +7,6 @@
     <string name="loading">loading</string>
     <string name="chooseAccounts">Choose accounts</string>
     <string name="next">Next</string>
+    <string name="pickAccounts">Pick accounts</string>
 
 </resources>
